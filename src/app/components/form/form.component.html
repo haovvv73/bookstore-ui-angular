@@ -1,0 +1,61 @@
+<div>
+    <mat-card class="p-3">
+        <form class="space-y-2" #bookForm="ngForm" (ngSubmit)="onSubmit()" >
+            <div class="w-full flex flex-row">
+                <button type="button" (click)="onNoClick()"  mat-icon-button color="warn" class="ml-auto" >
+                    <mat-icon>highlight_off</mat-icon>
+                </button>
+            </div>
+
+            <div>
+                <input type="text" hidden [(ngModel)]="book.title" id="id" name="id">
+            </div>
+
+            <div>
+                <mat-form-field class="w-full">
+                    <mat-label>Title</mat-label>
+                    <input matInput [(ngModel)]="book.title" name="title">
+                </mat-form-field>
+    
+                <mat-form-field class="w-full">
+                    <mat-label>author</mat-label>
+                    <input matInput [(ngModel)]="book.author" name="author">
+                </mat-form-field>
+    
+            </div>
+
+            <div class="flex items-center space-x-2" >
+                <mat-form-field class="w-full">
+                    <mat-label>Category</mat-label>
+                    <mat-select [(ngModel)]="book.category" name="category">
+                        <mat-option value="Tieu Thuyet">Tieu thuyet</mat-option>
+                        <mat-option value="Truyen Tranh">Truyen Tranh</mat-option>
+                        <mat-option value="Giao Duc">Giao Duc</mat-option>
+                    </mat-select>
+                </mat-form-field>
+    
+                <mat-form-field class="w-full">
+                    <mat-label>price</mat-label>
+                    <input matInput type="number" [(ngModel)]="book.price" name="price">
+                </mat-form-field>
+            </div>
+
+            <div class="space-x-2" >
+                <button 
+                    *ngIf="isCreate"
+                    type="submit"
+                    mat-raised-button color="primary" 
+                >
+                    <mat-icon>add</mat-icon> create
+                </button>
+                <button 
+                    *ngIf="!isCreate"
+                    type="submit"
+                    mat-raised-button color="warn" 
+                >
+                    <mat-icon>update</mat-icon> update
+                </button>
+            </div>
+        </form>
+    </mat-card>
+</div>

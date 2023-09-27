@@ -4,9 +4,19 @@
         class="h-[50px] w-[50px]"
         src="https://yt3.googleusercontent.com/UNPgHvjIz7QFucNCN-51aktIaYN553Way1ZYPMgHetBN8K4eBzXv6f7wpFy3j6jxCo6P2xoIfw=s900-c-k-c0x00ffffff-no-rj" alt="fahashaLogo">
 
-        <div class="flex space-x-2 items-center" >
-            <mat-icon >face</mat-icon>
-            <span>Hi, Hao</span>
+        <div class="flex items-center" >
+            <button [matMenuTriggerFor]="menu" mat-icon-button color="warn" >
+                <mat-icon>power_settings_new</mat-icon>
+            </button>
+
+            <div mat-icon-button  class="flex space-x-2 items-center" >
+                <mat-icon>face</mat-icon>
+                <span>Hi, Hao</span>
+            </div>
         </div>
+
+        <mat-menu #menu="matMenu">
+            <button routerLink="login" mat-menu-item>Logout</button>
+          </mat-menu>
     </div>
 </mat-toolbar>
