@@ -24,6 +24,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { BookDAOService } from './service/book-dao.service';
 import { FormsModule } from '@angular/forms';
 import {MatRippleModule} from '@angular/material/core';
+import { AuthService } from './service/auth.service';
+import { TokenServiceService } from './service/tokenService.service';
 
 @NgModule({
   declarations: [
@@ -50,9 +52,9 @@ import {MatRippleModule} from '@angular/material/core';
     MatSelectModule,
     HttpClientModule,
     FormsModule,
-    MatRippleModule
+    MatRippleModule,
   ],
-  providers: [BookDAOService],
+  providers: [BookDAOService,AuthService,TokenServiceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
