@@ -9,23 +9,25 @@ import { RegisterComponent } from './pages/register/register.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { HeaderComponent } from './components/header/header.component';
 
-import {MatTableModule} from '@angular/material/table';
-import {MatCardModule} from '@angular/material/card';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
 import { FormComponent } from './components/form/form.component';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatSelectModule} from '@angular/material/select';
-import { HttpClientModule } from '@angular/common/http';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BookDAOService } from './service/book-dao.service';
-import { FormsModule } from '@angular/forms';
-import {MatRippleModule} from '@angular/material/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatRippleModule } from '@angular/material/core';
 import { AuthService } from './service/auth.service';
 import { TokenServiceService } from './service/tokenService.service';
+import { NgToastModule } from 'ng-angular-popup';
+import { AuthenticateInterceptor } from './interceptor/authenticate.interceptor';
 
 @NgModule({
   declarations: [
@@ -53,8 +55,17 @@ import { TokenServiceService } from './service/tokenService.service';
     HttpClientModule,
     FormsModule,
     MatRippleModule,
+    ReactiveFormsModule,
+    NgToastModule
   ],
-  providers: [BookDAOService,AuthService,TokenServiceService],
+  providers: [
+    BookDAOService, AuthService, TokenServiceService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthenticateInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

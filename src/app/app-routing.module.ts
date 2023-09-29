@@ -3,16 +3,18 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
+import { authGuard } from './guard/auth.guard';
 
 const routes: Routes = [
   {
     path : '',
-    redirectTo :'login',
+    redirectTo :'dashboard',
     pathMatch:'full'
   },
   {
     path: 'dashboard',
     component : DashboardComponent,
+    canActivate:[authGuard]
   },
   {
     path : 'register',

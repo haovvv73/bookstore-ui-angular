@@ -5,6 +5,8 @@ import { Book } from 'src/app/models/book.model';
 import { BookDAOService } from 'src/app/service/book-dao.service';
 import { Subscription } from 'rxjs';
 import { ConfigDialog } from 'src/app/models/configDataDialog.model';
+import {NgToastService} from 'ng-angular-popup';
+import { RespronseObject } from 'src/app/models/responseObject.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,36 +20,57 @@ export class DashboardComponent implements OnInit,OnDestroy {
 
   ngOnInit(): void {}
 
-  constructor(public dialog: MatDialog, private bookDao : BookDAOService){
+  constructor(
+    public dialog: MatDialog, 
+    private bookDao : BookDAOService,
+    private toast : NgToastService
+  ){
     this.getBooks()
   }
 
   getBooks(){
-    this.bookDaoSubscription[0] = this.bookDao.getBooks().subscribe(result =>{
-      console.log(result);
-      if(result.data){
-        this.dataSource = result.data
+    this.bookDaoSubscription[0] = this.bookDao.getBooks().subscribe({
+      next:(result : RespronseObject) =>{
+        // console.log(result);
+        if(result.data){
+          this.dataSource = result.data
+        }
+      },
+      error:(error : any)=>{
+        // console.log(error);
       }
     })
 
   }
 
   deleteBook(id : number){
-    this.bookDaoSubscription[1] = this.bookDao.deleteBook(id).subscribe(result =>{
-      console.log(result);
-      this.getBooks()
+    this.bookDaoSubscription[1] = this.bookDao.deleteBook(id).subscribe({
+      next:(result : RespronseObject) =>{
+        console.log(result);
+        this.getBooks()
+        this.toast.success({detail:"SUCCESS", summary:'Delete success', duration:3000})
+      },
+      error:(error : any)=>{
+        // console.log(error);
+      }
     })
   }
 
   getBookById(id : number){
-    this.bookDaoSubscription[2] = this.bookDao.getBookById(id).subscribe(result =>{
-      if(result.data){
-        const configDataDialog : ConfigDialog = {
-          reRender: false,
-          data: result.data[0]
+    this.bookDaoSubscription[2] = this.bookDao.getBookById(id).subscribe({
+      next:(result : RespronseObject) =>{
+        if(result.data){
+          const configDataDialog : ConfigDialog = {
+            reRender: false,
+            data: result.data[0]
+          }
+          // open dialog
+          this.openDialog(configDataDialog)
         }
-        // open dialog
-        this.openDialog(configDataDialog)
+      },
+      error:(error:any)=>{
+        // console.log(error);
+        
       }
     })
 
@@ -74,6 +97,7 @@ export class DashboardComponent implements OnInit,OnDestroy {
       if(result && result.reRender){
         // reRender dashboard
         this.getBooks()
+        this.toast.success({detail:"SUCCESS", summary:'Update Data success', duration:3000})
       }
     });
   }

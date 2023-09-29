@@ -19,4 +19,8 @@ export class AuthService {
     return this.http.post<ResponseToken>(this.url + 'register',user)
   }
 
+  checkToken(token : any):Observable<boolean>{
+    return this.http.post<boolean>(this.url + 'check-token',{authToken:token})
+  }
+
 }

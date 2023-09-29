@@ -7,33 +7,68 @@
                 <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                     Create Your Account
                 </h1>
-                <form class="space-y-4 md:space-y-6" #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm.value)">
+                <form class="space-y-4 md:space-y-6" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                    
                     <div>
                         <label for="emailUser" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
                         <input 
-                        ngModel    
-                        type="email" name="email" id="emailUser" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required="">
+                        formControlName="email"   
+                        type="email" id="emailUser" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required="">
+
+                        <div    
+                            *ngIf="email && email.invalid && (email.touched || email.dirty )" 
+                            class="text-sm text-red-500" 
+                        >
+                            <span *ngIf="email.errors?.['required']" > Email is required </span>
+                            <span *ngIf="email.errors?.['email']" > Invalid email format </span>
+                        </div>
                     </div>
 
                     <div>
                         <label for="nameUser" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your name</label>
                         <input 
-                        ngModel
-                        type="text" name="name" id="nameUser" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nguyen Van A" required="">
+                        formControlName="name"   
+                        type="text" id="nameUser" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Nguyen Van A" required="">
+
+                        <div    
+                            *ngIf="name && name.invalid && (name.touched || name.dirty )" 
+                            class="text-sm text-red-500" 
+                        >
+                            <span *ngIf="name.errors?.['required']" > Name is required </span>
+                            <span *ngIf="name.errors?.['pattern']" > Invalid name format </span>
+                        </div>
                     </div>
 
                     <div>
                         <label for="phoneUser" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your phone</label>
                         <input 
-                        ngModel
-                        type="number" name="phone" id="phoneUser" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="123456789" required="">
+                        formControlName="phone"  
+                        type="number" id="phoneUser" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="123456789" required="">
+
+                        <div    
+                            *ngIf="phone && phone.invalid && (phone.touched || phone.dirty )" 
+                            class="text-sm text-red-500" 
+                        >
+                            <span *ngIf="phone.errors?.['required']" > Phone is required </span>
+                            <span *ngIf="phone.errors?.['pattern']" > Invalid phone format </span>
+                        </div>
                     </div>
 
                     <div>
                         <label for="passwordUser" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                         <input 
-                        ngModel
-                        type="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="">
+                        formControlName="password"  
+                        type="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="">
+
+                        <div 
+                            *ngIf="password && password.invalid && (password.dirty || password.touched)" 
+                            class="text-sm text-red-500"
+                        >
+                            <span *ngIf="password.errors?.['required']" > Password is required </span> 
+                            <span *ngIf="password.errors?.['minlength']" > 
+                                Password must be at least 6 characters long. 
+                            </span>
+                        </div>
                     </div>
 
                     <button mat-raised-button color="warn" type="submit" class="w-full text-white ">

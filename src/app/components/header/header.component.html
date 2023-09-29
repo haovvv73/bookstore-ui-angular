@@ -11,12 +11,12 @@
 
             <div mat-icon-button  class="flex space-x-2 items-center" >
                 <mat-icon>face</mat-icon>
-                <span>Hi, Hao</span>
+                <span>Hi, {{userName}}</span>
             </div>
         </div>
 
         <mat-menu #menu="matMenu">
-            <button routerLink="login" mat-menu-item>Logout</button>
+            <button (click)="logout()" mat-menu-item>Logout</button>
           </mat-menu>
     </div>
 </mat-toolbar>

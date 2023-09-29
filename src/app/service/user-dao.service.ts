@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
 import { TokenServiceService } from './tokenService.service';
+import { ResponseUser } from '../models/responseUser.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,9 +22,9 @@ export class UserDaoService {
     return headers
   }
 
-  getUserInfo():Observable<Array<User>>{
+  getUserInfo():Observable<ResponseUser>{
     const headers = this.getHeadersWithToken()
-    return this.http.get<Array<User>>(this.url,{headers : headers})
+    return this.http.get<ResponseUser>(this.url,{headers : headers})
   }
 
 }
