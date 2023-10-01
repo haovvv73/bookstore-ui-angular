@@ -66,7 +66,7 @@ export class LoginComponent implements OnDestroy, OnInit {
         },
         error:(error : any)=>{
           if(error.status == 401 && error.ok == false){
-            this.toast.error({detail:"ERROR", summary:error.error.message, duration:5000})
+            this.toast.error({detail:"ERROR", summary:error.error.error, duration:5000})
             this.clearForm()
           }
           // console.log(error);

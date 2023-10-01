@@ -9,7 +9,7 @@ import { TokenServiceService } from './tokenService.service';
   providedIn: 'root'
 })
 export class BookDAOService {
-  private url: string = 'http://localhost:4040/api/books/'
+  private url: string = 'http://localhost:4040/api/v1/'
 
   constructor(private http: HttpClient,private tokenService : TokenServiceService) { }
 
@@ -25,26 +25,26 @@ export class BookDAOService {
 
   getBooks(): Observable<RespronseObject> {
     const headers = this.getHeadersWithToken();
-    return this.http.get<RespronseObject>(this.url,{headers : headers})
+    return this.http.get<RespronseObject>(this.url + 'books',{headers : headers})
   }
 
   deleteBook(id: number): Observable<RespronseObject> {
     const headers = this.getHeadersWithToken();
-    return this.http.delete<RespronseObject>(this.url + `delete/${id}`,{headers : headers})
+    return this.http.delete<RespronseObject>(this.url + `books/${id}`,{headers : headers})
   }
 
   createBook(book: Book): Observable<RespronseObject> {
     const headers = this.getHeadersWithToken();
-    return this.http.post<RespronseObject>(this.url + `create`, book,{headers : headers})
+    return this.http.post<RespronseObject>(this.url + `books`, book,{headers : headers})
   }
 
   getBookById(id: number):Observable<RespronseObject> {
     const headers = this.getHeadersWithToken();
-    return this.http.get<RespronseObject>(this.url +`book/${id}`,{headers : headers})
+    return this.http.get<RespronseObject>(this.url +`books/${id}`,{headers : headers})
   }
 
   updateBook(book : Book):Observable<RespronseObject>{
     const headers = this.getHeadersWithToken();
-    return this.http.put<RespronseObject>(this.url + `update`, book,{headers : headers})
+    return this.http.put<RespronseObject>(this.url + `books`, book,{headers : headers})
   }
 }

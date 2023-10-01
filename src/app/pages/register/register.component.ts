@@ -80,7 +80,7 @@ export class RegisterComponent implements OnDestroy, OnInit {
         },
         error:(error : any)=>{
           if(error.status == 409 && error.ok == false){
-            this.toast.error({detail:"ERROR", summary:error.error.message, duration:5000})
+            this.toast.error({detail:"ERROR", summary:error.error.error, duration:5000})
             this.clearForm()
           }
           // console.warn(error);

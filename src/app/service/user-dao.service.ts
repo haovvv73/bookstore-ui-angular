@@ -9,7 +9,7 @@ import { ResponseUser } from '../models/responseUser.model';
   providedIn: 'root'
 })
 export class UserDaoService {
-  private url: string = 'http://localhost:4040/api/user/'
+  private url: string = 'http://localhost:4040/api/v1/'
   constructor(private http : HttpClient,private tokenService : TokenServiceService) { }
 
   private getHeadersWithToken(): HttpHeaders {
@@ -24,7 +24,7 @@ export class UserDaoService {
 
   getUserInfo():Observable<ResponseUser>{
     const headers = this.getHeadersWithToken()
-    return this.http.get<ResponseUser>(this.url,{headers : headers})
+    return this.http.get<ResponseUser>(this.url + 'user',{headers : headers})
   }
 
 }
