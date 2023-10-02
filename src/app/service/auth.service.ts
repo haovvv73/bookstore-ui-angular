@@ -3,24 +3,24 @@ import { Injectable } from '@angular/core';
 import { ResponseToken } from '../models/responseToken.model';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
+import { environment } from '../environment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private url: string = 'http://localhost:4040/api/v1/auth/'
   constructor(private http: HttpClient) { }
 
   login(user : User):Observable<ResponseToken>{
-    return this.http.post<ResponseToken>(this.url + 'login',user)
+    return this.http.post<ResponseToken>(environment.apiUrl + 'auth/login',user)
   }
 
   register(user : User):Observable<ResponseToken>{
-    return this.http.post<ResponseToken>(this.url + 'register',user)
+    return this.http.post<ResponseToken>(environment.apiUrl + 'auth/register',user)
   }
 
   checkToken(token : any):Observable<boolean>{
-    return this.http.post<boolean>(this.url + 'check-token',{authToken:token})
+    return this.http.post<boolean>(environment.apiUrl + 'auth/check-token',{authToken:token})
   }
 
 }

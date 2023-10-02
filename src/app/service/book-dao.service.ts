@@ -4,12 +4,12 @@ import { Observable } from 'rxjs';
 import { RespronseObject } from '../models/responseObject.model';
 import { Book } from '../models/book.model';
 import { TokenServiceService } from './tokenService.service';
+import { environment } from '../environment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookDAOService {
-  private url: string = 'http://localhost:4040/api/v1/'
 
   constructor(private http: HttpClient,private tokenService : TokenServiceService) { }
 
@@ -25,26 +25,26 @@ export class BookDAOService {
 
   getBooks(): Observable<RespronseObject> {
     const headers = this.getHeadersWithToken();
-    return this.http.get<RespronseObject>(this.url + 'books',{headers : headers})
+    return this.http.get<RespronseObject>(environment.apiUrl + 'books',{headers : headers})
   }
 
   deleteBook(id: number): Observable<RespronseObject> {
     const headers = this.getHeadersWithToken();
-    return this.http.delete<RespronseObject>(this.url + `books/${id}`,{headers : headers})
+    return this.http.delete<RespronseObject>(environment.apiUrl + `books/${id}`,{headers : headers})
   }
 
   createBook(book: Book): Observable<RespronseObject> {
     const headers = this.getHeadersWithToken();
-    return this.http.post<RespronseObject>(this.url + `books`, book,{headers : headers})
+    return this.http.post<RespronseObject>(environment.apiUrl + `books`, book,{headers : headers})
   }
 
   getBookById(id: number):Observable<RespronseObject> {
     const headers = this.getHeadersWithToken();
-    return this.http.get<RespronseObject>(this.url +`books/${id}`,{headers : headers})
+    return this.http.get<RespronseObject>(environment.apiUrl +`books/${id}`,{headers : headers})
   }
 
   updateBook(book : Book):Observable<RespronseObject>{
     const headers = this.getHeadersWithToken();
-    return this.http.put<RespronseObject>(this.url + `books`, book,{headers : headers})
+    return this.http.put<RespronseObject>(environment.apiUrl + `books`, book,{headers : headers})
   }
 }

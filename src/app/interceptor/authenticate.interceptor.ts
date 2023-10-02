@@ -26,7 +26,12 @@ export class AuthenticateInterceptor implements HttpInterceptor {
         }
 
         // missing token
-        if(error.status === 401 && error.error.message === "MISSING authentication token"){
+        if(error.status === 401 && error.error.error === "MISSING authentication token"){
+          this.toast.error({detail:"Your workspace is expired", summary:'Please login angain', duration:5000})
+          this.router.navigate(['login'])
+        }
+
+        if(error.status === 500 && error.error.error === "Internal Server Error"){
           this.toast.error({detail:"Your workspace is expired", summary:'Please login angain', duration:5000})
           this.router.navigate(['login'])
         }

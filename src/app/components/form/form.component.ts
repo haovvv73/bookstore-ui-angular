@@ -6,6 +6,7 @@ import { BookDAOService } from 'src/app/service/book-dao.service';
 import { Subscription } from 'rxjs';
 import { ConfigDialog } from 'src/app/models/configDataDialog.model';
 import { RespronseObject } from 'src/app/models/responseObject.model';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-form',
@@ -22,13 +23,14 @@ export class FormComponent implements OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<FormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ConfigDialog,
-    private bookDao: BookDAOService
+    private bookDao: BookDAOService,
+    private toast: NgToastService
   ) {
     this.bookForm = new FormGroup({
-      title: new FormControl('',[Validators.required]),
-      author: new FormControl('',[Validators.required]),
+      title: new FormControl('',[Validators.required,Validators.pattern("^[a-zA-Z0-9 ]*$")]), 
+      author: new FormControl('',[Validators.required,Validators.pattern("^[a-zA-Z0-9 ]*$")]),
       category: new FormControl('',Validators.required),
-      price: new FormControl('',[Validators.required]),
+      price: new FormControl('',[Validators.required,Validators.pattern("^[0-9]+$")]),
       id: new FormControl(-1),
     })
 
@@ -57,8 +59,7 @@ export class FormComponent implements OnDestroy {
 
   // METHOD
   displayForm(book : Book){
-    console.log(book);
-    
+    //console.log(book);
     this.bookForm.get('title')?.setValue(book.title)
     this.bookForm.get('author')?.setValue(book.author)
     this.bookForm.get('category')?.setValue(book.category)
@@ -76,6 +77,11 @@ export class FormComponent implements OnDestroy {
     }
   }
 
+  clearForm(): void{
+    this.bookForm.get('title')?.setValue('')
+    this.bookForm.get('category')?.setValue('')
+  }
+
   onNoClick(): void {
     this.dialogRef.close();
   }
@@ -83,6 +89,7 @@ export class FormComponent implements OnDestroy {
   onSubmit() {
     if (!this.bookForm.invalid) {
       const book = this.getForm()
+      
       // UPDATE
       if (book.id > -1) {
         // console.log(book);
@@ -96,7 +103,11 @@ export class FormComponent implements OnDestroy {
             }
           },
           error: (error: any) => {
-            // console.log(error);
+            // console.warn(error);
+            if(error.status == 409 && error.ok == false){
+              this.toast.error({detail:"ERROR", summary:error.error.error, duration:5000})
+              this.clearForm()
+            }
           }
         })
 
@@ -115,7 +126,11 @@ export class FormComponent implements OnDestroy {
             }
           },
           error: (error: any) => {
-            console.log(error);
+            // console.warn(error);
+            if(error.status == 409 && error.ok == false){
+              this.toast.error({detail:"ERROR", summary:error.error.error, duration:5000})
+              this.clearForm()
+            }
           }
         })
       }

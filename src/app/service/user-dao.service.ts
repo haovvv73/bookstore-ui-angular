@@ -4,12 +4,12 @@ import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
 import { TokenServiceService } from './tokenService.service';
 import { ResponseUser } from '../models/responseUser.model';
+import { environment } from '../environment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserDaoService {
-  private url: string = 'http://localhost:4040/api/v1/'
   constructor(private http : HttpClient,private tokenService : TokenServiceService) { }
 
   private getHeadersWithToken(): HttpHeaders {
@@ -24,7 +24,7 @@ export class UserDaoService {
 
   getUserInfo():Observable<ResponseUser>{
     const headers = this.getHeadersWithToken()
-    return this.http.get<ResponseUser>(this.url + 'user',{headers : headers})
+    return this.http.get<ResponseUser>(environment.apiUrl + 'user',{headers : headers})
   }
 
 }

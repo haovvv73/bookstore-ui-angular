@@ -43,6 +43,7 @@ export class DashboardComponent implements OnInit,OnDestroy {
 
   }
 
+  // em tách riêng
   deleteBook(id : number){
     this.bookDaoSubscription[1] = this.bookDao.deleteBook(id).subscribe({
       next:(result : RespronseObject) =>{
@@ -60,6 +61,7 @@ export class DashboardComponent implements OnInit,OnDestroy {
     this.bookDaoSubscription[2] = this.bookDao.getBookById(id).subscribe({
       next:(result : RespronseObject) =>{
         if(result.data){
+          // data book
           const configDataDialog : ConfigDialog = {
             reRender: false,
             data: result.data[0]
@@ -110,6 +112,7 @@ export class DashboardComponent implements OnInit,OnDestroy {
         if(sub) sub.unsubscribe()
       }
     }
+    this.dialog.closeAll()
   }
 
 }
