@@ -21,8 +21,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private token: TokenServiceService
   ) { }
 
-
-
   ngOnInit(): void {
     this.userDaoSubcription = this.userDao.getUserInfo().subscribe({
       next: (result: ResponseUser) => {

@@ -1,22 +1,22 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FormComponent } from 'src/app/components/form/form.component';
 import { Book } from 'src/app/models/book.model';
 import { BookDAOService } from 'src/app/service/book-dao.service';
-import { Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { ConfigDialog } from 'src/app/models/configDataDialog.model';
 import {NgToastService} from 'ng-angular-popup';
 import { RespronseObject } from 'src/app/models/responseObject.model';
+import { UnSub } from 'src/app/abstract/un-sub.abstract';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit,OnDestroy {
+export class DashboardComponent extends UnSub implements OnInit, OnDestroy {
   dataSource: Array<Book> = []
   displayedColumn: Array<string> = ['id', 'title', 'author', 'category', 'price', 'action']
-  bookDaoSubscription :Subscription[] = [] 
 
   ngOnInit(): void {}
 
@@ -25,11 +25,12 @@ export class DashboardComponent implements OnInit,OnDestroy {
     private bookDao : BookDAOService,
     private toast : NgToastService
   ){
+    super()
     this.getBooks()
   }
 
   getBooks(){
-    this.bookDaoSubscription[0] = this.bookDao.getBooks().subscribe({
+    this.bookDao.getBooks().pipe(takeUntil(super.unsubcribe$)).subscribe({
       next:(result : RespronseObject) =>{
         // console.log(result);
         if(result.data){
@@ -43,9 +44,8 @@ export class DashboardComponent implements OnInit,OnDestroy {
 
   }
 
-  // em tách riêng
   deleteBook(id : number){
-    this.bookDaoSubscription[1] = this.bookDao.deleteBook(id).subscribe({
+    this.bookDao.deleteBook(id).pipe(takeUntil(super.unsubcribe$)).subscribe({
       next:(result : RespronseObject) =>{
         console.log(result);
         this.getBooks()
@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit,OnDestroy {
   }
 
   getBookById(id : number){
-    this.bookDaoSubscription[2] = this.bookDao.getBookById(id).subscribe({
+    this.bookDao.getBookById(id).pipe(takeUntil(super.unsubcribe$)).subscribe({
       next:(result : RespronseObject) =>{
         if(result.data){
           // data book
@@ -89,12 +89,12 @@ export class DashboardComponent implements OnInit,OnDestroy {
 
   // ------------------
 
-  openDialog(configDataDialog : ConfigDialog): void {
+  openDialog(configDataDialog : ConfigDialog): void { 
     const dialogRef = this.dialog.open(FormComponent,{
       data:configDataDialog
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().pipe(takeUntil(super.unsubcribe$)).subscribe(result => {
       console.log('The dialog was closed');
       if(result && result.reRender){
         // reRender dashboard
@@ -104,15 +104,8 @@ export class DashboardComponent implements OnInit,OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {    
-    if(this.bookDaoSubscription.length > 0){
-      for(let sub of this.bookDaoSubscription){
-        console.log('loop');
-        
-        if(sub) sub.unsubscribe()
-      }
-    }
+  ngOnDestroy(): void {
     this.dialog.closeAll()
+    super.onUnsubcribe()
   }
-
 }
